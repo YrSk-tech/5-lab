@@ -1,74 +1,74 @@
 #include <iostream>
 
-#define n 5
+#define MATRIX_SIZE 5
 
 using namespace std;
 
 class Array {
 private:
-	double blockArray[n];
+	double values[MATRIX_SIZE];
 public:
-	friend void SetArray(Array Array[]);
+	friend void SetArray(Array array[]);
 
-	friend void GetArray(Array Array[]);
+	friend void GetArray(Array array[]);
 
-	friend void MergeSort(Array Array[]);
+	friend void MergeSort(Array array[]);
 
-	friend void CalculateProductColumsAndArithmeticMean(Array Array[]);
+	friend void CalculateProductColumsAndArithmeticMean(Array array[]);
 };
 
-void SetArray(Array Array[]) {
-	for (int i = 0; i < n; ++i)
-		for (int j = 0; j < n; ++j) {
+void SetArray(Array array[]) {
+	for (int i = 0; i < MATRIX_SIZE; ++i)
+		for (int j = 0; j < MATRIX_SIZE; ++j) {
 			cout << "[" << i + 1 << "][" << j + 1 << "] = ";
-			cin >> Array[i].blockArray[j];
+			cin >> array[i].values[j];
 		}
 }
 
-void GetArray(Array Array[]) {
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) {
-			cout << Array[i].blockArray[j] << "\t";
+void GetArray(Array array[]) {
+	for (int i = 0; i < MATRIX_SIZE; ++i) {
+		for (int j = 0; j < MATRIX_SIZE; ++j) {
+			cout << array[i].values[j] << "\t";
 		}
 		cout << endl;
 	}
 }
 
-void MergeSort(Array Array[]) {
-	for (int i = 0; i < n; i++) {
-		for (int block_size_iterator = 1; block_size_iterator < n; block_size_iterator *= 2) {
-			for (int block_iterator = 0; block_iterator < n - block_size_iterator; block_iterator += 2 * block_size_iterator) {
-				int LeftBlockIterator = 0;
-				int RightBlockIterator = 0;
-				int LeftBorder = block_iterator;
-				int MidBorder = block_iterator + block_size_iterator;
-				int RightBorder = block_iterator + 2 * block_size_iterator;
-				RightBorder = (RightBorder < n) ? RightBorder : n;
-				int* SortedBlock = new int[RightBorder - LeftBorder];
+void MergeSort(Array array[]) {
+	for (int i = 0; i < MATRIX_SIZE; i++) {
+		for (int block_size_iterator = 1; block_size_iterator < MATRIX_SIZE; block_size_iterator *= 2) {
+			for (int block_iterator = 0; block_iterator < MATRIX_SIZE - block_size_iterator; block_iterator += 2 * block_size_iterator) {
+				int leftBlockIterator = 0;
+				int rightBlockIterator = 0;
+				int leftBorder = block_iterator;
+				int midBorder = block_iterator + block_size_iterator;
+				int rightBorder = block_iterator + 2 * block_size_iterator;
+				rightBorder = (rightBorder < MATRIX_SIZE) ? rightBorder : MATRIX_SIZE;
+				int* SortedBlock = new int[rightBorder - leftBorder];
 
-				while (LeftBorder + LeftBlockIterator < MidBorder && MidBorder + RightBlockIterator < RightBorder) {
-					if (Array[i].blockArray[LeftBorder + LeftBlockIterator] > Array[i].blockArray[MidBorder + RightBlockIterator]) {
-						SortedBlock[LeftBlockIterator + RightBlockIterator] = Array[i].blockArray[LeftBorder +
-							LeftBlockIterator];
-						LeftBlockIterator++;
+				while (leftBorder + leftBlockIterator < midBorder && midBorder + rightBlockIterator < rightBorder) {
+					if (array[i].values[leftBorder + leftBlockIterator] > array[i].values[midBorder + rightBlockIterator]) {
+						SortedBlock[leftBlockIterator + rightBlockIterator] = array[i].values[leftBorder +
+							leftBlockIterator];
+						leftBlockIterator++;
 					}
 					else {
-						SortedBlock[LeftBlockIterator + RightBlockIterator] = Array[i].blockArray[MidBorder +
-							RightBlockIterator];
-						RightBlockIterator++;
+						SortedBlock[leftBlockIterator + rightBlockIterator] = array[i].values[midBorder +
+							rightBlockIterator];
+						rightBlockIterator++;
 					}
 				}
-				while (LeftBorder + LeftBlockIterator < MidBorder) {
-					SortedBlock[LeftBlockIterator + RightBlockIterator] = Array[i].blockArray[LeftBorder + LeftBlockIterator];
-					LeftBlockIterator++;
+				while (leftBorder + leftBlockIterator < midBorder) {
+					SortedBlock[leftBlockIterator + rightBlockIterator] = array[i].values[leftBorder + leftBlockIterator];
+					leftBlockIterator++;
 				}
-				while (MidBorder + RightBlockIterator < RightBorder) {
-					SortedBlock[LeftBlockIterator + RightBlockIterator] = Array[i].blockArray[MidBorder + RightBlockIterator];
-					RightBlockIterator++;
+				while (midBorder + rightBlockIterator < rightBorder) {
+					SortedBlock[leftBlockIterator + rightBlockIterator] = array[i].values[midBorder + rightBlockIterator];
+					rightBlockIterator++;
 				}
 
-				for (int MergeIterator = 0; MergeIterator < LeftBlockIterator + RightBlockIterator; MergeIterator++) {
-					Array[i].blockArray[LeftBorder + MergeIterator] = SortedBlock[MergeIterator];
+				for (int MergeIterator = 0; MergeIterator < leftBlockIterator + rightBlockIterator; MergeIterator++) {
+					array[i].values[leftBorder + MergeIterator] = SortedBlock[MergeIterator];
 				}
 				delete SortedBlock;
 
@@ -78,24 +78,24 @@ void MergeSort(Array Array[]) {
 	}
 }
 
-void CalculateProductColumsAndArithmeticMean(Array Array[]) {
+void CalculateProductColumsAndArithmeticMean(Array array[]) {
 	double arithmeticMean = 0.0;
-	for (int i = 0; i < n - 1; i++) {
+	for (int i = 0; i < MATRIX_SIZE - 1; i++) {
 		int productElementsColumn = 1;
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < MATRIX_SIZE; j++) {
 			if (i < j) {
-				productElementsColumn = Array[j].blockArray[i] * productElementsColumn;
+				productElementsColumn = array[j].values[i] * productElementsColumn;
 			}
 		}
 		arithmeticMean += productElementsColumn;
 		cout << "the product of the elements column under the main diagonal of the matrix(" << i << ") = " << productElementsColumn << "\n";
 	}
-	double N = n;
+	double N = MATRIX_SIZE;
 	cout << "\n" << "arithmetic mean = " << arithmeticMean / 5 << "\n";
 }
 
 int main() {
-	Array Array[n];
+	Array Array[MATRIX_SIZE];
 	cout << "Input elements:\n" << endl;
 	SetArray(Array);
 	cout << "\nOld matrix:\n" << endl;
